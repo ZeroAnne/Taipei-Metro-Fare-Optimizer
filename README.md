@@ -62,11 +62,17 @@ npm install
 
 ### 2. 設定 TDX API 憑證
 
-前往 [TDX 平台](https://tdx.transportdata.tw/) 申請帳號，取得 `Client ID` 與 `Client Secret`，填入 `src/lib/tdx-api.ts`：
+前往 [TDX 平台](https://tdx.transportdata.tw/) 申請帳號，取得 **Client ID** 與 **Client Secret**：
 
-```ts
-const CLIENT_ID: string     = '你的 Client ID'
-const CLIENT_SECRET: string = '你的 Client Secret'
+```bash
+cp .env.example .env.local
+```
+
+編輯 `.env.local`，填入實際值（此檔已被 `.gitignore` 排除，不會被提交）：
+
+```env
+NEXT_PUBLIC_TDX_CLIENT_ID=你的Client_ID
+NEXT_PUBLIC_TDX_CLIENT_SECRET=你的Client_Secret
 ```
 
 ### 3. 啟動開發伺服器
@@ -100,7 +106,19 @@ npm run dev
 npm run build
 ```
 
-或直接在 Vercel Dashboard 匯入此 GitHub 專案即可。
+或直接在 Vercel Dashboard 匯入此 GitHub 專案即可。部署時在 Vercel 專案設定裡加入環境變數 `NEXT_PUBLIC_TDX_CLIENT_ID`、`NEXT_PUBLIC_TDX_CLIENT_SECRET`。
+
+---
+
+## 若曾把憑證提交到 Git（例如 GitHub）
+
+**Git 歷史會一直保留舊的 commit**，單純改程式再重推，過去的 commit 裡仍看得到憑證，所以：
+
+1. **到 TDX 平台重新產生一組新的 Client ID / Client Secret**（讓舊的失效）。
+2. 把**新的**憑證只放在本機 `.env.local`，不要寫進程式碼。
+3. 之後只提交「改用環境變數」的程式碼（例如這次的修改），不要再提交憑證。
+
+這樣即使有人翻舊 commit，舊憑證也已無法使用。若倉庫為私有的且只有你使用，風險較低；若為公開倉庫，強烈建議一定要換一組新憑證。
 
 ---
 
